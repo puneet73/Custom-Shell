@@ -1,4 +1,5 @@
-#include <bits/stdc++.h>
+#include "map.hpp"
+#include "vector.hpp"
 #include <fstream>
 #include <unistd.h>
 #include <sys/types.h>
@@ -6,6 +7,9 @@
 #include <sys/stat.h>
 #include <dirent.h>
 #include <cstring>
+#include <fcntl.h> 
+#include <unistd.h> 
+#include <bits/stdc++.h>
 
 using namespace std;
 
@@ -26,7 +30,7 @@ int shell_wait(vector<string> args);
 int shell_clear(vector<string> args);
 
 // Map to associate command strings with function calls
-map<string, int (*)(vector<string>)> command_map = {
+Map<string, int (*)(vector<string>)> command_Map = {
     {"cd", shell_cd},
     {"ls", shell_ls},
     {"mkdir", shell_mkdir},
@@ -72,8 +76,8 @@ int execute(vector<string> args) {
     string command = args[0];
     args.erase(args.begin());
 
-    if (command_map.count(command)) {
-        return command_map[command](args);
+    if (command_Map.count(command)) {
+        return command_Map[command](args);
     } else {
         pid_t pid = fork();
         if (pid == 0) {
@@ -271,7 +275,7 @@ int shell_grep(vector<string> args) {
 int shell_help(vector<string> args) {
     cout << "Custom Shell Help\n"
          << "Supported commands:\n";
-    for (const auto& cmd : command_map) {
+    for (const auto& cmd : command_Map) {
         cout << "  " << cmd.first << endl;
     }
     return 1;
